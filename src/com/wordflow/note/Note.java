@@ -1,16 +1,22 @@
-package com.wordflow.notemanager;
+package com.wordflow.note;
+
+import com.wordflow.word.Word;
 
 import java.util.ArrayList;
 
 public class Note {
+
+    // Fields
     private int index;
     private String name;
-    ArrayList<Word> myWordList = new ArrayList<>();
+    private ArrayList<Word> myWordList = new ArrayList<>();
 
+    // Constructor
     public Note(String name) {
         this.name = name;
     }
 
+    // Getter, Setter
     public int getIndex() {
         return index;
     }
@@ -27,6 +33,8 @@ public class Note {
         this.name = name;
     }
 
+    // Methods
+    // Print all words in a note {}
     public void printWordList() {
         for (int i = 0; i < myWordList.size(); i++) {
             System.out.println(" - " + searchWordByIndex(i).getName() + ": " + searchWordByIndex(i).getDef());

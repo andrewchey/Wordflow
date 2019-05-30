@@ -1,6 +1,8 @@
-import com.wordflow.notemanager.Note;
+import com.wordflow.note.Note;
 import com.wordflow.notemanager.NoteManager;
-import com.wordflow.notemanager.Word;
+import com.wordflow.screen.InputScanner;
+import com.wordflow.screen.MenuPrinter;
+import com.wordflow.word.Word;
 
 import java.util.Scanner;
 
@@ -9,6 +11,9 @@ public class Flow {
         Flow myWordFlow = new Flow();
         myWordFlow.start();
     }
+
+    private static MenuPrinter myMessenger = new MenuPrinter();
+    private static InputScanner myInputScanner = new InputScanner();
 
     private void start() {
         NoteManager myNoteManager = new NoteManager();
@@ -19,84 +24,49 @@ public class Flow {
         while (true) {
 
             // Welcome
-            System.out.println("====================");
-            System.out.println("Welcome to WordFlow");
-            System.out.println("====================");
+            myMessenger.printMenu("Greetings");
 
-            // List out notes here
-            System.out.println("List of notes: ");
+            // List out notes
             myNoteManager.printNoteList();
 
-            // Main menu
-            System.out.println("--------------------");
-            System.out.println("Main menu:");
-            System.out.println("1: Select note");
-            System.out.println("2: New note");
-            System.out.println("3: Delete note");
-            System.out.println("4: Quit");
-            System.out.println("--------------------");
-            System.out.print("(INPUT) Please select your option: ");
+            // Print main menu
+            myMessenger.printMenu("Main");
 
-            Scanner scanner = new Scanner(System.in);
-            int num = scanner.nextInt();
+            // Get user input
+            int num = myInputScanner.InputScanner("Options", 1);
 
             if (num == 1) {
-                // Confirm selection
-                System.out.println("Main menu: Select note selected.");
                 // Select the note
-                System.out.print("(INPUT) Enter note name: ");
-                Scanner scanner1 = new Scanner(System.in);
-                String noteName = scanner1.nextLine();
+                String noteName = myInputScanner.InputScanner("NoteName", "a");
                 // Enter the Note Menu
                 startNoteMenu(myNoteManager.searchNoteByName(noteName));
 
 
             } else if (num == 2) {
-                // Confirm selection
-                System.out.println("Main menu: New note selected.");
-
-                // Get note name from user input
-                System.out.print("(INPUT) Enter new note name: ");
-                Scanner scanner1 = new Scanner(System.in);
-                String noteName = scanner1.nextLine();
-//                System.out.println(noteName);
+                // Select the note
+                String noteName = myInputScanner.InputScanner("NoteName", "a");
 
                 // Create new note
                 Note myNote = new Note(noteName);
-                String resultNewNote = "Successfully created a new note named '" + noteName + "'\n";
-                System.out.println(resultNewNote);
 
                 // Add new note to the list of notes
                 myNoteManager.addNote(myNote);
 
             } else if (num == 3) {
-                // Confirm selection
-                System.out.println("Main menu: Delete note selected.");
-                // Delete note
-                System.out.println("Enter the name of the note to be deleted: ");
-                Scanner scanner1 = new Scanner(System.in);
-                String noteToRemove = scanner1.nextLine();
+                // Select the note
+                String noteToRemove = myInputScanner.InputScanner("NoteName", "a");
 
-                System.out.print("(INPUT) Are you sure you want to delete note: '" + noteToRemove + "'? (y/n)");
-                Scanner scanner2 = new Scanner(System.in);
-                String response = scanner2.nextLine();
-                if (response.equals("y")) {
-                    // Remove Note
+                // Remove note if the name matches
+                if (myInputScanner.ConfirmRemoval("NoteName")) {
                     try {
                         myNoteManager.removeNoteByName(noteToRemove);
-                        System.out.println("Successfully removed note: '" + noteToRemove + "'.");
                     } catch (Exception e) {
-                        System.out.println("[ERROR] There is no note called '" + noteToRemove + "'.");
+                        myMessenger.printMenu("NoteNameMisMatchError");
                     }
-                } else {
-                    continue;
                 }
             } else {
-                // Confirm selection
-                System.out.println("Main menu: Quit selected.");
-
                 // Quit
-                System.out.println("Shutting down...");
+                myMessenger.printMenu("Farewell");
                 break;
             }
 
@@ -104,7 +74,7 @@ public class Flow {
 
     }
 
-    public void startNoteMenu(Note myNote) {
+    private void startNoteMenu(Note myNote) {
 
         while (true) {
 
