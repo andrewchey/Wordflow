@@ -20,7 +20,7 @@
 *.rar
 
 # Out #
-*.out/
+out/
 
 # Custom
 *.iml
