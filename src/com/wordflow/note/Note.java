@@ -71,4 +71,10 @@ public class Note {
         myWordList.remove(i);
     }
 
+    public void open(String s) {
+
+
+
+    }
+
 }

@@ -38,6 +38,10 @@ public class Flow {
             if (num == 1) {
                 // Select the note
                 String noteName = myInputScanner.InputScanner("NoteName", "a");
+                // Check whether user input has any matching note name
+
+
+
                 // Enter the Note Menu
                 startNoteMenu(myNoteManager.searchNoteByName(noteName));
 
