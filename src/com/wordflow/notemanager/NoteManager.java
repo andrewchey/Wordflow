@@ -60,4 +60,6 @@ public class NoteManager {
         myNoteList.remove(i);
     }
 
+    public boolean existNote(String s) { if (searchNoteByName(s) == null) {return false;} else {return true;} }
+
 }
