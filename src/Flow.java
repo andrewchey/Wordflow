@@ -26,14 +26,14 @@ public class Flow {
             // Welcome
             screen.print("Greetings");
 
-            // List out notes
+            // Print note list
             myNoteManager.printNoteList();
 
             // Print main menu
-            screen.print("Main");
+            screen.print("MainMenu");
 
             // Get user input
-            int num = scanner.Scan("Options", 1);
+            int num = scanner.Scan("MenuOptions", 1);
 
             if (num == 1) {
                 // Select the note
@@ -82,25 +82,17 @@ public class Flow {
         while (true) {
 
             // Welcome
-            System.out.println("====================");
-            System.out.println(myNote.getName());
-            System.out.println("====================");
+            screen.printCustomMenu(myNote.getName());
 
-            // List out notes here
-            System.out.println("List of words: ");
+            // Print word list
             myNote.printWordList();
 
-            // Main menu
-            System.out.println("--------------------");
-            System.out.println("Note menu:");
-            System.out.println("1: New word");
-            System.out.println("2: Delete word");
-            System.out.println("3: Quit");
-            System.out.println("--------------------");
-            System.out.print("(INPUT) Please select your option: ");
+            // Print note menu
+            screen.print("NoteMenu");
 
-            Scanner scanner = new Scanner(System.in);
-            int num = scanner.nextInt();
+            // Get user input
+            int num = scanner.Scan("MenuOptions", 1);
+
 
             if (num == 1) {
                 // Confirm selection
