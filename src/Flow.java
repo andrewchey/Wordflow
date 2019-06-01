@@ -1,7 +1,7 @@
 import com.wordflow.note.Note;
 import com.wordflow.notemanager.NoteManager;
-import com.wordflow.screen.InputScanner;
-import com.wordflow.screen.MenuPrinter;
+import com.wordflow.screen.ScreenPrinter;
+import com.wordflow.screen.ScreenScanner;
 import com.wordflow.word.Word;
 
 import java.util.Scanner;
@@ -12,43 +12,42 @@ public class Flow {
         myWordFlow.start();
     }
 
-    private static MenuPrinter myMessenger = new MenuPrinter();
-    private static InputScanner myInputScanner = new InputScanner();
+    private static ScreenPrinter screen = new ScreenPrinter();
+    private static ScreenScanner scanner = new ScreenScanner();
 
     private void start() {
-        NoteManager myNoteManager = new NoteManager();
-        startMainMenu(myNoteManager);
+        NoteManager noteManager = new NoteManager();
+        startMainMenu(noteManager);
     }
 
     private void startMainMenu(NoteManager myNoteManager) {
         while (true) {
 
             // Welcome
-            myMessenger.printMenu("Greetings");
+            screen.print("Greetings");
 
             // List out notes
             myNoteManager.printNoteList();
 
             // Print main menu
-            myMessenger.printMenu("Main");
+            screen.print("Main");
 
             // Get user input
-            int num = myInputScanner.InputScanner("Options", 1);
+            int num = scanner.Scan("Options", 1);
 
             if (num == 1) {
                 // Select the note
-                String noteName = myInputScanner.InputScanner("NoteName", "a");
+                String noteName = scanner.Scan("NoteName", "a");
                 // Check whether user input has any matching note name
-
-
-
-                // Enter the Note Menu
-                startNoteMenu(myNoteManager.searchNoteByName(noteName));
-
+                if (myNoteManager.existNote(noteName)) {
+                    startNoteMenu(myNoteManager.searchNoteByName(noteName));
+                } else {
+                    screen.print("NoteNameMisMatchError");
+                }
 
             } else if (num == 2) {
                 // Select the note
-                String noteName = myInputScanner.InputScanner("NoteName", "a");
+                String noteName = scanner.Scan("NoteName", "a");
 
                 // Create new note
                 Note myNote = new Note(noteName);
@@ -58,19 +57,19 @@ public class Flow {
 
             } else if (num == 3) {
                 // Select the note
-                String noteToRemove = myInputScanner.InputScanner("NoteName", "a");
+                String noteToRemove = scanner.Scan("NoteName", "a");
 
-                // Remove note if the name matches
-                if (myInputScanner.ConfirmRemoval("NoteName")) {
-                    try {
+                // Remove note if the note exists.
+                if (myNoteManager.existNote(noteToRemove)) {
+                    if (scanner.ConfirmRemoval("ConfirmRemoval", noteToRemove)) {
                         myNoteManager.removeNoteByName(noteToRemove);
-                    } catch (Exception e) {
-                        myMessenger.printMenu("NoteNameMisMatchError");
                     }
+                } else {
+                    screen.print("NoteNameMisMatchError");
                 }
             } else {
                 // Quit
-                myMessenger.printMenu("Farewell");
+                screen.print("Farewell");
                 break;
             }
 
