@@ -46,7 +46,7 @@ public class Flow {
                 }
 
             } else if (num == 2) {
-                // Select the note
+                // Get note name from user input
                 String noteName = scanner.Scan("NoteName", "a");
 
                 // Create new note
@@ -56,10 +56,10 @@ public class Flow {
                 myNoteManager.addNote(myNote);
 
             } else if (num == 3) {
-                // Select the note
+                // Get note name from user input
                 String noteToRemove = scanner.Scan("NoteName", "a");
 
-                // Remove note if the note exists.
+                // Remove note if the note exists and if confirmed
                 if (myNoteManager.existNote(noteToRemove)) {
                     if (scanner.ConfirmRemoval("ConfirmRemoval", noteToRemove)) {
                         myNoteManager.removeNoteByName(noteToRemove);
@@ -77,15 +77,15 @@ public class Flow {
 
     }
 
-    private void startNoteMenu(Note myNote) {
+    private void startNoteMenu(Note note) {
 
         while (true) {
 
             // Welcome
-            screen.printCustomMenu(myNote.getName());
+            screen.printCustomMenu(note.getName());
 
             // Print word list
-            myNote.printWordList();
+            note.printWordList();
 
             // Print note menu
             screen.print("NoteMenu");
@@ -95,51 +95,63 @@ public class Flow {
 
 
             if (num == 1) {
-                // Confirm selection
-                System.out.println("Note menu: New word selected.");
 
                 // Get word name from user input
-                System.out.print("(INPUT) Enter new word name: ");
-                Scanner scanner1 = new Scanner(System.in);
-                String wordName = scanner1.nextLine();
+                String wordName = scanner.Scan("WordName", "a");
 
                 // Get word definition from user input
-                System.out.print("(INPUT) Enter the new word's definition: ");
-                Scanner scanner2 = new Scanner(System.in);
-                String wordDef = scanner2.nextLine();
+                String wordDefinition = scanner.Scan("WordDefinition", "a");
 
                 // Get word tag from user input
                 // doSomething
 
                 // Create new word
-                Word myWord = new Word(wordName, wordDef);
-                String resultNewNote = "Successfully created a new note named '" + wordName + "': " + wordDef + "\n";
-                System.out.println(resultNewNote);
+                Word myWord = new Word(wordName, wordDefinition);
 
                 // Add new word to the list of notes
-                myNote.addWord(myWord);
+                note.addWord(myWord);
 
             } else if (num == 2) {
-                System.out.println("Enter the name of the word to be deleted: ");
-                Scanner scanner1 = new Scanner(System.in);
-                String wordToRemove = scanner1.nextLine();
 
-                System.out.print("(INPUT) Are you sure you want to delete word: '" + wordToRemove + "'? (y/n)");
-                Scanner scanner2 = new Scanner(System.in);
-                String response = scanner2.nextLine();
-                if (response.equals("y")) {
-                    // Remove word
-                    try {
-                        myNote.removeWordByName(wordToRemove);
-                        System.out.println("Successfully removed word: '" + wordToRemove + "'.");
-                    } catch (Exception e) {
-                        System.out.println("[ERROR] There is no word called '" + wordToRemove + "'.");
+                // Get word name from user input
+                String wordName = scanner.Scan("WordName", "a");
+
+                // Set word if the word exists
+                if (note.existWord(wordName)) {
+
+                    // Get new word name from user input
+                    String newWordName = scanner.Scan("WordName", "a");
+
+                    // Get new word definition from user input
+                    String newWordDefinition = scanner.Scan("WordDefinition", "a");
+
+                    // Get new word tag from user input
+                    // doSomething
+
+                    // Replace the word with new word
+                    note.searchWordByName(wordName).setName(newWordName);
+                    note.searchWordByName(wordName).setDef(newWordDefinition);
+
+                } else {
+                    screen.print("WordNameMisMatchError");
+                }
+
+            } else if (num == 3) {
+
+                // Get word name from user input
+                String wordToRemove = scanner.Scan("WordName", "a");
+
+                // Remove note if the note exists and if confirmed
+                if (note.existWord(wordToRemove)) {
+                    if (scanner.ConfirmRemoval("ConfirmRemoval", wordToRemove)) {
+                        note.removeWordByName(wordToRemove);
                     }
                 } else {
-                    continue;
+                    screen.print("WordNameMisMatchError");
                 }
+
             } else {
-                System.out.println("Exiting '" + myNote.getName() + "'...");
+                screen.print("ExitToMain");
                 break;
             }
         }

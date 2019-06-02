@@ -71,10 +71,6 @@ public class Note {
         myWordList.remove(i);
     }
 
-    public void open(String s) {
-
-
-
-    }
+    public boolean existWord(String s) { if (searchWordByName(s) == null) {return false;} else {return true;} }
 
 }

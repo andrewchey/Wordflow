@@ -32,7 +32,7 @@ public class ScreenScanner {
         System.out.print(myBundle.getString(ask));
         Scanner scanner = new Scanner(System.in);
 
-        return scanner.next();
+        return scanner.nextLine();
     }
 
     // Scanner for removal confirmation
