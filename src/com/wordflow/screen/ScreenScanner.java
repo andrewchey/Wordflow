@@ -1,5 +1,6 @@
 package com.wordflow.screen;
 
+import java.util.InputMismatchException;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -9,30 +10,34 @@ public class ScreenScanner {
     private static ResourceBundle myBundle = ResourceBundle.getBundle("messenger");
 
     // Scanner for integer input
-    public int Scan(String ask, int outputType) {
+    public int ScanInt(String ask) {
 
         System.out.print(myBundle.getString(ask));
         Scanner scanner = new Scanner(System.in);
 
+        int result;
         try {
-            int result = scanner.nextInt();
-            return result;
-        } catch(Exception e) {
+            result = scanner.nextInt();
+        } catch(InputMismatchException e) {
             do {
-                askAgainForValidInput(ask, scanner);
-            }while(!scanner.hasNextInt());
-            int result = scanner.nextInt();
-            return result;
+                System.out.print(myBundle.getString(ask));
+                scanner.next();
+            } while (!scanner.hasNextInt());
+            result = scanner.nextInt();
         }
+
+        return result;
     }
 
     // Scanner for string input
-    public String Scan(String ask, String outputType) {
+    public String Scan(String ask) {
 
         System.out.print(myBundle.getString(ask));
         Scanner scanner = new Scanner(System.in);
 
-        return scanner.nextLine();
+        String result = scanner.nextLine();
+
+        return result;
     }
 
     // Scanner for removal confirmation
@@ -45,17 +50,13 @@ public class ScreenScanner {
 
         if (!scanner.hasNext(Pattern.compile("y|n"))) {
             do {
-                askAgainForValidInput(ask, scanner);
+                System.out.print(myBundle.getString(ask));
+                scanner.next();
             } while (!scanner.hasNext(Pattern.compile("y|n")));
         }
         return (scanner.nextLine()).equals("y");
     }
 
-    private void askAgainForValidInput(String ask, Scanner scanner) {
-        System.out.println(myBundle.getString("InvalidInputError"));
-        System.out.print(myBundle.getString(ask));
-        scanner.nextLine();
-    }
 }
 
 

@@ -3,8 +3,11 @@ package com.wordflow.note;
 import com.wordflow.word.Word;
 
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class Note {
+
+    private static ResourceBundle myBundle = ResourceBundle.getBundle("messenger");
 
     // Fields
     private int index;
@@ -36,6 +39,7 @@ public class Note {
     // Methods
     // Print all words in a note {}
     public void printWordList() {
+        System.out.println(myBundle.getString("ListWord"));
         for (int i = 0; i < myWordList.size(); i++) {
             System.out.println(" - " + searchWordByIndex(i).getName() + ": " + searchWordByIndex(i).getDef());
         }

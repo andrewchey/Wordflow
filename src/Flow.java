@@ -4,8 +4,6 @@ import com.wordflow.screen.ScreenPrinter;
 import com.wordflow.screen.ScreenScanner;
 import com.wordflow.word.Word;
 
-import java.util.Scanner;
-
 public class Flow {
     public static void main(String[] args) {
         Flow myWordFlow = new Flow();
@@ -33,11 +31,11 @@ public class Flow {
             screen.print("MainMenu");
 
             // Get user input
-            int num = scanner.Scan("MenuOptions", 1);
+            int num = scanner.ScanInt("MenuOptions");
 
             if (num == 1) {
                 // Select the note
-                String noteName = scanner.Scan("NoteName", "a");
+                String noteName = scanner.Scan("NoteName");
                 // Check whether user input has any matching note name
                 if (myNoteManager.existNote(noteName)) {
                     startNoteMenu(myNoteManager.searchNoteByName(noteName));
@@ -47,7 +45,7 @@ public class Flow {
 
             } else if (num == 2) {
                 // Get note name from user input
-                String noteName = scanner.Scan("NoteName", "a");
+                String noteName = scanner.Scan("NoteName");
 
                 // Create new note
                 Note myNote = new Note(noteName);
@@ -57,7 +55,7 @@ public class Flow {
 
             } else if (num == 3) {
                 // Get note name from user input
-                String noteToRemove = scanner.Scan("NoteName", "a");
+                String noteToRemove = scanner.Scan("NoteName");
 
                 // Remove note if the note exists and if confirmed
                 if (myNoteManager.existNote(noteToRemove)) {
@@ -91,16 +89,16 @@ public class Flow {
             screen.print("NoteMenu");
 
             // Get user input
-            int num = scanner.Scan("MenuOptions", 1);
+            int num = scanner.ScanInt("MenuOptions");
 
 
             if (num == 1) {
 
                 // Get word name from user input
-                String wordName = scanner.Scan("WordName", "a");
+                String wordName = scanner.Scan("WordName");
 
                 // Get word definition from user input
-                String wordDefinition = scanner.Scan("WordDefinition", "a");
+                String wordDefinition = scanner.Scan("WordDefinition");
 
                 // Get word tag from user input
                 // doSomething
@@ -114,16 +112,16 @@ public class Flow {
             } else if (num == 2) {
 
                 // Get word name from user input
-                String wordName = scanner.Scan("WordName", "a");
+                String wordName = scanner.Scan("WordName");
 
                 // Set word if the word exists
                 if (note.existWord(wordName)) {
 
                     // Get new word name from user input
-                    String newWordName = scanner.Scan("WordName", "a");
+                    String newWordName = scanner.Scan("WordName");
 
                     // Get new word definition from user input
-                    String newWordDefinition = scanner.Scan("WordDefinition", "a");
+                    String newWordDefinition = scanner.Scan("WordDefinition");
 
                     // Get new word tag from user input
                     // doSomething
@@ -139,7 +137,7 @@ public class Flow {
             } else if (num == 3) {
 
                 // Get word name from user input
-                String wordToRemove = scanner.Scan("WordName", "a");
+                String wordToRemove = scanner.Scan("WordName");
 
                 // Remove note if the note exists and if confirmed
                 if (note.existWord(wordToRemove)) {
