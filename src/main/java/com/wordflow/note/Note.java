@@ -12,7 +12,7 @@ public class Note {
     // Fields
     private int index;
     private String name;
-    private ArrayList<Word> myWordList = new ArrayList<>();
+    private ArrayList<Word> myWordList = new ArrayList<Word>();
 
     // Constructor
     public Note(String name) {

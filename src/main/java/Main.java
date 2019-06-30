@@ -1,24 +1,34 @@
+import com.sun.org.apache.xalan.internal.xsltc.compiler.FlowList;
 import com.wordflow.note.Note;
 import com.wordflow.notemanager.NoteManager;
 import com.wordflow.screen.ScreenPrinter;
 import com.wordflow.screen.ScreenScanner;
 import com.wordflow.word.Word;
+import com.wordflow.wordnet.WordNet;
+import net.sf.extjwnl.JWNLException;
+import net.sf.extjwnl.dictionary.Dictionary;
 
-public class Flow {
-    public static void main(String[] args) {
-        Flow myWordFlow = new Flow();
+import java.util.ArrayList;
+
+public class Main {
+    public static void main(String[] args) throws JWNLException {
+
+        Main myWordFlow = new Main();
         myWordFlow.start();
+
     }
 
     private static ScreenPrinter screen = new ScreenPrinter();
     private static ScreenScanner scanner = new ScreenScanner();
 
-    private void start() {
+    private void start() throws JWNLException {
         NoteManager noteManager = new NoteManager();
-        startMainMenu(noteManager);
+        Dictionary dictionary = Dictionary.getDefaultResourceInstance();
+
+        startMainMenu(noteManager, dictionary);
     }
 
-    private void startMainMenu(NoteManager myNoteManager) {
+    private void startMainMenu(NoteManager myNoteManager, Dictionary dictionary) throws JWNLException {
         while (true) {
 
             // Welcome
@@ -33,12 +43,14 @@ public class Flow {
             // Get user input
             int num = scanner.ScanInt("MenuOptions");
 
+            // Menu Options:
             if (num == 1) {
+
                 // Select the note
                 String noteName = scanner.Scan("NoteName");
                 // Check whether user input has any matching note name
                 if (myNoteManager.existNote(noteName)) {
-                    startNoteMenu(myNoteManager.searchNoteByName(noteName));
+                    startNoteMenu(myNoteManager.searchNoteByName(noteName), dictionary);
                 } else {
                     screen.print("NoteNameMisMatchError");
                 }
@@ -75,7 +87,7 @@ public class Flow {
 
     }
 
-    private void startNoteMenu(Note note) {
+    private void startNoteMenu(Note note, Dictionary dictionary) throws JWNLException {
 
         while (true) {
 
@@ -91,8 +103,18 @@ public class Flow {
             // Get user input
             int num = scanner.ScanInt("MenuOptions");
 
-
             if (num == 1) {
+
+                // Initialize flowlist
+                WordNet.FlowList flowList = new WordNet.FlowList();
+
+                // Get search keyword
+                String inputKeyword = scanner.Scan("Keyword");
+
+                // Enter FlowMenu
+                startFlowMenu(dictionary, note, flowList, inputKeyword);
+
+            } else if (num == 2) {
 
                 // Get word name from user input
                 String wordName = scanner.Scan("WordName");
@@ -100,16 +122,13 @@ public class Flow {
                 // Get word definition from user input
                 String wordDefinition = scanner.Scan("WordDefinition");
 
-                // Get word tag from user input
-                // doSomething
-
                 // Create new word
                 Word myWord = new Word(wordName, wordDefinition);
 
                 // Add new word to the list of notes
                 note.addWord(myWord);
 
-            } else if (num == 2) {
+            } else if (num == 3) {
 
                 // Get word name from user input
                 String wordName = scanner.Scan("WordName");
@@ -123,9 +142,6 @@ public class Flow {
                     // Get new word definition from user input
                     String newWordDefinition = scanner.Scan("WordDefinition");
 
-                    // Get new word tag from user input
-                    // doSomething
-
                     // Replace the word with new word
                     note.searchWordByName(wordName).setName(newWordName);
                     note.searchWordByName(wordName).setDef(newWordDefinition);
@@ -134,7 +150,7 @@ public class Flow {
                     screen.print("WordNameMisMatchError");
                 }
 
-            } else if (num == 3) {
+            } else if (num == 4) {
 
                 // Get word name from user input
                 String wordToRemove = scanner.Scan("WordName");
@@ -153,6 +169,49 @@ public class Flow {
                 break;
             }
         }
+
+    }
+
+    private void startFlowMenu(Dictionary dictionary, Note note, WordNet.FlowList flowList, String inputKeyword) throws JWNLException {
+
+        while (true) {
+
+            // Flow
+            WordNet.Item item = Flow(dictionary, note, flowList, inputKeyword);
+
+            // Ask to Flow again
+            int flowNum = scanner.ScanFlow(item);
+
+            // Search for corresponding word and then Flow again
+            if (flowNum > 0) {
+                inputKeyword = item.getSynonyms().get(flowNum - 1);
+            } else {
+                break;
+            }
+
+        }
+
+    }
+
+    private WordNet.Item Flow(Dictionary dictionary, Note note, WordNet.FlowList flowList, String input) throws JWNLException {
+
+        // Search
+        WordNet.Item item = WordNet.search(dictionary, input);
+
+        // Add to FlowList
+        WordNet.FlowItem flowItem = new WordNet.FlowItem(item);
+        flowList.add(flowItem);
+
+        // Ask to add to note, and if true, add to note
+        boolean isAdd = scanner.Confirm("ConfirmAddToNote");
+        if (isAdd) {
+            String wordName = item.getWord();
+            String wordDefinition = item.getDefinitionString();
+            Word word = new Word(wordName, wordDefinition);
+            note.addWord(word);
+        }
+
+        return item;
 
     }
 

@@ -1,5 +1,7 @@
 package com.wordflow.screen;
 
+import com.wordflow.wordnet.WordNet;
+
 import java.util.InputMismatchException;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -45,8 +47,8 @@ public class ScreenScanner {
 
         Scanner scanner = new Scanner(System.in);
 
-        // Ask user one more time for confirmation
-        System.out.print(myBundle.getString("ConfirmRemoval"));
+        // Ask user for confirmation
+        System.out.print(myBundle.getString(ask));
 
         if (!scanner.hasNext(Pattern.compile("y|n"))) {
             do {
@@ -55,6 +57,44 @@ public class ScreenScanner {
             } while (!scanner.hasNext(Pattern.compile("y|n")));
         }
         return (scanner.nextLine()).equals("y");
+    }
+
+    // Scanner for confirmation
+    public Boolean Confirm(String ask) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        // Ask user for confirmation
+        System.out.print(myBundle.getString(ask));
+
+        if (!scanner.hasNext(Pattern.compile("y|n"))) {
+            do {
+                System.out.print(myBundle.getString(ask));
+                scanner.next();
+            } while (!scanner.hasNext(Pattern.compile("y|n")));
+        }
+        return (scanner.nextLine()).equals("y");
+    }
+
+    public int ScanFlow(WordNet.Item item) {
+        System.out.print(myBundle.getString("Flow"));
+        Scanner scanner = new Scanner(System.in);
+
+        int result;
+
+        try {
+            result = scanner.nextInt();
+        } catch(InputMismatchException e) {
+            if (scanner.hasNext(Pattern.compile("q"))) {return -1;}
+            do {
+                System.out.print(myBundle.getString("Flow"));
+                scanner.next();
+            } while (!scanner.hasNextInt());
+            result = scanner.nextInt();
+        }
+
+        return result;
+
     }
 
 }

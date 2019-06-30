@@ -1,5 +1,7 @@
 package com.wordflow.screen;
 
+import com.wordflow.wordnet.WordNet;
+
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
@@ -15,4 +17,8 @@ public class ScreenPrinter {
         System.out.println("====================\n" + s + "\n====================");
     }
 
+    public void printFlow(WordNet.Item item) {
+        print("Flow");
+        System.out.println(item.getSynonyms());
+    }
 }

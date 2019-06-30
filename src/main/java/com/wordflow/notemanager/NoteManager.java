@@ -11,7 +11,7 @@ public class NoteManager {
     private static ResourceBundle myBundle = ResourceBundle.getBundle("messenger");
 
     // Fields
-    private ArrayList<Note> myNoteList = new ArrayList<>();
+    private ArrayList<Note> myNoteList = new ArrayList<Note>();
 
     // Getter, Setter
     public ArrayList<Note> getMyNoteList() {
